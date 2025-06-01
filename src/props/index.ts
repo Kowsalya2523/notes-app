@@ -6,3 +6,7 @@ export interface NotificationPopupProps {
   autoDismiss?: boolean
   duration?: number
 }
+
+export interface AddNoteProps {
+  onCancel: () => void;
+}

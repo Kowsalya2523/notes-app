@@ -4,10 +4,14 @@ import assets from "@/assets";
 import Image from "next/image";
 import "./page.css";
 import { useEffect, useState } from "react";
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "@/controller/firebase";
 import { useRouter } from "next/navigation";
-import type { ConfirmationResult, RecaptchaVerifier as RecaptchaVerifierType } from "firebase/auth";
+import type {
+  ConfirmationResult,
+  RecaptchaVerifier as RecaptchaVerifierType,
+} from "firebase/auth";
+import { NotificationPopup } from "@/organisms";
 
 declare global {
   interface Window {
@@ -16,68 +20,113 @@ declare global {
   }
 }
 
-
 const Login = () => {
   const [step, setStep] = useState<"mobile" | "otp">("mobile");
   const [mobile, setMobile] = useState("");
   const [otp, setOtp] = useState("");
-  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
-  const router = useRouter()
+  const [confirmationResult, setConfirmationResult] =
+    useState<ConfirmationResult | null>(null);
+  const router = useRouter();
+  const [notification, setNotification] = useState<{
+    message: string;
+    type?: "error" | "success" | "warning" | "info";
+    show: boolean;
+  }>({
+    message: "",
+    type: undefined,
+    show: false,
+  });
+  const [loadingSendOtp, setLoadingSendOtp] = useState(false);
+  const [loadingVerifyOtp, setLoadingVerifyOtp] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && !window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-        size: 'invisible',
-      });
+    if (typeof window !== "undefined" && !window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+        }
+      );
     }
   }, []);
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoadingSendOtp(true);
+
     const phoneNumber = `+91${mobile}`;
     const appVerifier = window.recaptchaVerifier;
 
     try {
       const result = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
       setConfirmationResult(result);
-      alert('Otp Sent Successfully');
-      setStep('otp');
+      setNotification({
+        message: "OTP sent successfully!",
+        type: "success",
+        show: true,
+      });
+      setStep("otp");
     } catch (error) {
-      console.error('Error sending OTP:', error);
-      alert('Failed to send OTP. Try again.');
+      console.error("Error sending OTP:", error);
+      setNotification({
+        message: "Failed to send otp. Try again!",
+        type: "error",
+        show: true,
+      });
+    } finally {
+      setLoadingSendOtp(false);
     }
   };
 
-const handleVerifyOtp = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    await confirmationResult?.confirm(otp);
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoadingVerifyOtp(true);
 
-    const checkRes = await fetch(`http://localhost:3001/users?mobile=${mobile}`);
-    const users = await checkRes.json();
+    try {
+      await confirmationResult?.confirm(otp);
 
-   if (users.length > 0) {
-  await fetch('http://localhost:3001/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      mobile,
-      loginTime: new Date().toISOString()
-    })
-  });
-  alert(`Logged in successfully with mobile: ${mobile}`);
-  router.push('/');
-} else {
-  alert('This number is not registered. Please sign up first.');
-  router.push(`/sign-up?mobile=${mobile}`);
-}
-  } catch (error) {
-    console.error('Error verifying OTP or checking user:', error);
-    alert('Something went wrong. Please try again.');
-  }
-};
+      const checkRes = await fetch(`http://localhost:3001/users?mobile=${mobile}`);
+      const users = await checkRes.json();
+
+      if (users.length > 0) {
+        await fetch("http://localhost:3001/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            mobile,
+            loginTime: new Date().toISOString(),
+          }),
+        });
+        setNotification({
+          message: "Logged in successfully!",
+          type: "success",
+          show: true,
+        });
+        setTimeout(() => {
+          router.push("/notes-list");
+        }, 1000);
+      } else {
+        setNotification({
+          message: "This number is not registered. Please sign up first.",
+          type: "warning",
+          show: true,
+        });
+        router.push(`/sign-up?mobile=${mobile}`);
+      }
+    } catch (error) {
+      console.error("Error verifying OTP or checking user:", error);
+      setNotification({
+        message: "Something went wrong. Try again!",
+        type: "error",
+        show: true,
+      });
+    } finally {
+      setLoadingVerifyOtp(false);
+    }
+  };
 
   return (
     <section className="login-wrapper">
@@ -97,7 +146,7 @@ const handleVerifyOtp = async (e: React.FormEvent) => {
         <h2 className="title">
           {step === "mobile" ? "One Step Closer to Your Notes!!" : "Enter OTP"}
         </h2>
-        {step === "mobile" ? (
+         {step === "mobile" ? (
           <form className="form-wrapper" onSubmit={handleSendOtp}>
             <label htmlFor="mobile">Mobile Number</label>
             <input
@@ -108,8 +157,21 @@ const handleVerifyOtp = async (e: React.FormEvent) => {
               placeholder="Enter your mobile number"
               pattern="[0-9]{10}"
               required
+              disabled={loadingSendOtp} 
             />
-            <button type="submit">Send OTP</button>
+            <button
+              type="submit"
+              disabled={loadingSendOtp}
+              className={loadingSendOtp ? "button-loading" : ""}
+            >
+              {loadingSendOtp ? (
+                <>
+                  <span className="spinner" /> Sending...
+                </>
+              ) : (
+                "Send OTP"
+              )}
+            </button>
           </form>
         ) : (
           <form className="form-wrapper" onSubmit={handleVerifyOtp}>
@@ -121,12 +183,31 @@ const handleVerifyOtp = async (e: React.FormEvent) => {
               onChange={(e) => setOtp(e.target.value)}
               placeholder="Enter the OTP"
               required
+              disabled={loadingVerifyOtp} 
             />
-            <button type="submit">Verify OTP</button>
+            <button
+              type="submit"
+              disabled={loadingVerifyOtp}
+              className={loadingVerifyOtp ? "button-loading" : ""}
+            >
+              {loadingVerifyOtp ? (
+                <>
+                  <span className="spinner" /> Verifying...
+                </>
+              ) : (
+                "Verify OTP"
+              )}
+            </button>
           </form>
         )}
       </section>
       <div id="recaptcha-container"></div>
+      <NotificationPopup
+        message={notification.message}
+        type={notification.type}
+        show={notification.show}
+        onClose={() => setNotification({ ...notification, show: false })}
+      />
     </section>
   );
 };

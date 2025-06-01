@@ -1,0 +1,32 @@
+.add-note-wrapper {
+  max-width: 480px;
+  margin: 20px auto;
+  border-radius: 8px;
+}
+
+.add-note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.add-note-form label {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.add-note-form textarea {
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  background: white;
+  color: black;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+

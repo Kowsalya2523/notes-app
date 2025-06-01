@@ -5,6 +5,7 @@ import Image from "next/image";
 import "./page.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { NotificationPopup } from "@/organisms";
 
 const SignUp = () => {
   const searchParams = useSearchParams();
@@ -14,6 +15,16 @@ const SignUp = () => {
     username: "",
     email: "",
     phone: "",
+  });
+
+  const [notification, setNotification] = useState<{
+    message: string;
+    type?: "error" | "success" | "warning" | "info";
+    show: boolean;
+  }>({
+    message: "",
+    type: undefined,
+    show: false,
   });
 
   const router = useRouter();
@@ -39,7 +50,11 @@ const SignUp = () => {
     );
     const existingUsers = await check.json();
     if (existingUsers.length > 0) {
-      alert("Mobile number already registered.");
+      setNotification({
+            message: "Mobile number already registered",
+            type: "info",
+            show: true,
+          })
       return;
     }
 
@@ -56,10 +71,18 @@ const SignUp = () => {
     });
 
     if (res.ok) {
-      alert("Signup successful!");
-      router.push("/");
+      setNotification({
+        message: "Signup successfully!",
+        type: "success",
+        show: true,
+      });
+      router.push("/login");
     } else {
-      alert("Signup failed. Try again.");
+      setNotification({
+        message: "Failed to sign in. Try again!",
+        type: "error",
+        show: true,
+      });
     }
   };
 
@@ -111,6 +134,12 @@ const SignUp = () => {
           <button type="submit">Sign Up</button>
         </form>
       </section>
+      <NotificationPopup
+        message={notification.message}
+        type={notification.type}
+        show={notification.show}
+        onClose={() => setNotification({ ...notification, show: false })}
+      />
     </section>
   );
 };

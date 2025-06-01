@@ -1,20 +1,20 @@
 .login-wrapper {
-    margin: 5% 15%;
-    display: flex;
-    gap: 12%;
-    align-items: center;
+  margin: 5% 15%;
+  display: flex;
+  gap: 12%;
+  align-items: center;
 }
 
 .left-wrapper {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .login-text {
-    background: linear-gradient(135deg, #FB6868 0%, #46BEA6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  background: linear-gradient(135deg, #FB6868 0%, #46BEA6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .login-card {
@@ -38,3 +38,25 @@
   gap: 32px;
 }
 
+.button-loading {
+  cursor: not-allowed;
+  position: relative;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 3px solid white;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+  color: white;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }}
