@@ -1,0 +1,12 @@
+.header-section{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    border-bottom: 4px solid lightgray;
+}
+
+.button-wrapper{
+    display: flex;
+    gap: 8px;
+}
