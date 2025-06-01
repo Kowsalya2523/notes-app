@@ -37,3 +37,14 @@
   flex-direction: column;
   gap: 16px;
 }
+
+@media (max-width: 768px) {
+  .left-wrapper{
+    display: none;
+  }
+
+  .signup-card{
+    width: 100%;
+    margin: 5%;
+  }
+}

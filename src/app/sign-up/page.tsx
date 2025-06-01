@@ -6,6 +6,7 @@ import "./page.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NotificationPopup } from "@/organisms";
+import { API_USERS } from "@/utils/api-constants";
 
 const SignUp = () => {
   const searchParams = useSearchParams();
@@ -46,7 +47,7 @@ const SignUp = () => {
     e.preventDefault();
 
     const check = await fetch(
-      `http://localhost:3001/users?mobile=${formData.phone}`
+      `${API_USERS}?mobile=${formData.phone}`
     );
     const existingUsers = await check.json();
     if (existingUsers.length > 0) {
@@ -58,7 +59,7 @@ const SignUp = () => {
       return;
     }
 
-    const res = await fetch("http://localhost:3001/users", {
+    const res = await fetch(API_USERS, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

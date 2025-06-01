@@ -12,6 +12,7 @@ import type {
   RecaptchaVerifier as RecaptchaVerifierType,
 } from "firebase/auth";
 import { NotificationPopup } from "@/organisms";
+import { API_LOGIN, API_USERS } from "@/utils/api-constants";
 
 declare global {
   interface Window {
@@ -26,7 +27,7 @@ const Login = () => {
   const [otp, setOtp] = useState("");
   const [confirmationResult, setConfirmationResult] =
     useState<ConfirmationResult | null>(null);
-  const router = useRouter();
+  const {push} = useRouter();
   const [notification, setNotification] = useState<{
     message: string;
     type?: "error" | "success" | "warning" | "info";
@@ -86,11 +87,11 @@ const Login = () => {
     try {
       await confirmationResult?.confirm(otp);
 
-      const checkRes = await fetch(`http://localhost:3001/users?mobile=${mobile}`);
+      const checkRes = await fetch(`${API_USERS}?mobile=${mobile}`);
       const users = await checkRes.json();
 
       if (users.length > 0) {
-        await fetch("http://localhost:3001/login", {
+       await fetch(API_LOGIN, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -106,7 +107,7 @@ const Login = () => {
           show: true,
         });
         setTimeout(() => {
-          router.push("/notes-list");
+          push("/notes-list");
         }, 1000);
       } else {
         setNotification({
@@ -114,7 +115,7 @@ const Login = () => {
           type: "warning",
           show: true,
         });
-        router.push(`/sign-up?mobile=${mobile}`);
+        push(`/sign-up?mobile=${mobile}`);
       }
     } catch (error) {
       console.error("Error verifying OTP or checking user:", error);

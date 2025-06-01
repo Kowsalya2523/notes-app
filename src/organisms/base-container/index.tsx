@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { NotificationPopup } from "../toggle-notify";
+import { Popup } from "../popup";
 
 export const BaseContainer = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -21,22 +22,27 @@ export const BaseContainer = ({ children }: { children: React.ReactNode }) => {
     show: false,
   });
 
+  const [showConfirmLogout, setShowConfirmLogout] = useState(false);
+
   const showLoginSignupButtons =
     pathname === "/" || pathname === "/login" || pathname === "/sign-up";
 
-  const onLogout = () => {
+  const confirmLogout = () => {
     setNotification({
       message: "Logged out successfully!",
       type: "success",
       show: true,
     });
+    setShowConfirmLogout(false);
     push("/");
   };
 
   return (
     <section>
       <section className="header-section">
-        <Image src={assets.img_logo} alt="logo-image" />
+        <Link href="/">
+          <Image src={assets.img_logo} alt="logo-image" />
+        </Link>
         <section className="button-wrapper">
           {showLoginSignupButtons ? (
             <>
@@ -48,11 +54,20 @@ export const BaseContainer = ({ children }: { children: React.ReactNode }) => {
               </Link>
             </>
           ) : (
-            <button onClick={onLogout}>Logout</button>
+            <button onClick={() => setShowConfirmLogout(true)}>Logout</button>
           )}
         </section>
       </section>
+
       <main className="base-main">{children}</main>
+      {showConfirmLogout && (
+        <Popup
+          title="Confirm Logout"
+          message="Are you sure you want to logout?"
+          onConfirm={confirmLogout}
+          onCancel={() => setShowConfirmLogout(false)}
+        />
+      )}
       <NotificationPopup
         message={notification.message}
         type={notification.type}

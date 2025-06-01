@@ -10,3 +10,9 @@
     display: flex;
     gap: 8px;
 }
+
+@media (max-width: 768px) {
+  .header-section{
+    padding: 20px;
+  }
+}

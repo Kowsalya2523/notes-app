@@ -48,7 +48,6 @@
   width: 16px;
   height: 16px;
   border: 3px solid white;
-  border-top-color: #333;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-right: 8px;
@@ -59,4 +58,16 @@
 @keyframes spin {
   to {
     transform: rotate(360deg);
-  }}
+  }
+}
+
+@media (max-width: 768px) {
+  .left-wrapper {
+    display: none;
+  }
+
+  .login-wrapper {
+    width: 100%;
+    margin: 5%;
+  }
+}

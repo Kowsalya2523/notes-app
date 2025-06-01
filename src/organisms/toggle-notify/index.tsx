@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import assets from "@/assets"
-import Image from "next/image"
-import {useEffect} from "react"
-import styles from "./style.module.css"
-import { NotificationPopupProps } from "@/props"
+import assets from "@/assets";
+import Image from "next/image";
+import { useEffect } from "react";
+import styles from "./style.module.css";
+import { NotificationPopupProps } from "@/props";
 
 export const NotificationPopup = ({
   message,
@@ -16,12 +16,12 @@ export const NotificationPopup = ({
 }: NotificationPopupProps) => {
   useEffect(() => {
     if (show && autoDismiss) {
-      const timer = setTimeout(onClose, duration)
-      return () => clearTimeout(timer)
+      const timer = setTimeout(onClose, duration);
+      return () => clearTimeout(timer);
     }
-  }, [show, autoDismiss, duration, onClose])
+  }, [show, autoDismiss, duration, onClose]);
 
-  if (!show) return null
+  if (!show) return null;
 
   return (
     <section className={`${styles.notification} ${styles[type]}`}>
@@ -34,5 +34,5 @@ export const NotificationPopup = ({
       <span className={styles.message}>{message}</span>
       <Image src={assets.ic_close} alt={"close"} width={14} height={14} />
     </section>
-  )
-}
+  );
+};

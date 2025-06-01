@@ -1,25 +1,10 @@
 {
   "notes": [
-   
   ],
   "users": [
-    {
-      "id": "a561",
-      "username": "Kowsalya",
-      "email": "kowsalyaeswaran23@gmail.com",
-      "mobile": "9090909090"
-    }
+    
   ],
   "login": [
-    {
-      "id": "22f1",
-      "mobile": "9090909090",
-      "loginTime": "2025-06-01T10:45:03.444Z"
-    },
-    {
-      "id": "4a0e",
-      "mobile": "9090909090",
-      "loginTime": "2025-06-01T11:27:25.694Z"
-    }
+   
   ]
 }

@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans&family=Caveat&display=swap');
 
-
 .home-wrapper {
     padding: 5% 8%;
     height: 90vh;
@@ -28,4 +27,24 @@
     display: flex;
     gap: 20px;
     flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .home-wrapper {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .image {
+    width: 100%;
+    height: 42vh;
+  }
+
+  .right-wrapper {
+    max-width: 100%;
+  }
+
+  .home-text {
+    font-size: 1.5rem;
+  }
 }
