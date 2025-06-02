@@ -77,7 +77,7 @@ const SignUp = () => {
         type: "success",
         show: true,
       });
-      router.push("/login");
+      router.push("/notes-list");
     } else {
       setNotification({
         message: "Failed to sign in. Try again!",

@@ -1,20 +1,21 @@
 .login-wrapper {
-    margin: 5% 15%;
-    display: flex;
-    gap: 12%;
-    align-items: center;
+  padding: 8% 15%;
+  display: flex;
+  gap: 12%;
+  align-items: center;
+  background: linear-gradient(135deg, #FFC1C1 0%, #A6E7DB 100%);
 }
 
 .left-wrapper {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .login-text {
-    background: linear-gradient(135deg, #FB6868 0%, #46BEA6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  background: linear-gradient(135deg, #FB6868 0%, #46BEA6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .signup-card {
@@ -39,11 +40,11 @@
 }
 
 @media (max-width: 768px) {
-  .left-wrapper{
+  .left-wrapper {
     display: none;
   }
 
-  .signup-card{
+  .signup-card {
     width: 100%;
     margin: 5%;
   }

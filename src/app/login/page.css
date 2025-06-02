@@ -1,8 +1,9 @@
 .login-wrapper {
-  margin: 5% 15%;
+  padding: 10% 15%;
   display: flex;
   gap: 12%;
   align-items: center;
+  background: linear-gradient(135deg, #FFC1C1 0%, #A6E7DB 100%);
 }
 
 .left-wrapper {
